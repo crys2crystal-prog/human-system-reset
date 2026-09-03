@@ -1,0 +1,68 @@
+<!doctype html>
+<html>
+<head>
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>Human System Reset — Presenter</title>
+  <link rel="stylesheet" href="/style.css">
+</head>
+<body>
+<header>
+  <div><div class="eyebrow">HUMAN SYSTEM RESET</div><b>PRESENTER CONTROL ROOM</b></div>
+  <div id="counts">Poll 0 · Time 0 · Phone 0 · Sleep 0 · Wheel 0</div>
+</header>
+<main class="grid">
+  <aside class="card controls">
+    <h2>Student link</h2>
+    <img id="qr" alt="Student QR code">
+    <input id="studentUrl" readonly>
+    <p class="tiny">Students scan this QR code. Keep this page open on the presenter laptop.</p>
+    <hr>
+    <h2>Live poll</h2>
+    <input id="question" placeholder="Question">
+    <div id="options"></div>
+    <button id="add">+ ADD OPTION</button>
+    <button id="start">START LIVE POLL</button>
+    <button class="light" id="close">CLOSE POLL</button>
+    <hr>
+    <button class="danger" id="clear">CLEAR SESSION</button>
+  </aside>
+
+  <section class="stage">
+    <div class="card">
+      <div class="eyebrow">LIVE POLL RESULTS</div>
+      <h1 id="liveQ">Ready</h1>
+      <div id="bars"></div>
+    </div>
+
+    <div class="card wheel">
+      <div class="eyebrow">CONSOLIDATED WHEEL OF LIFE</div>
+      <h2 id="wr">0 responses</h2>
+      <div id="groupWheel" class="wheel-svg-wrap presenter-wheel"></div>
+      <p class="tiny center">Anonymous group average across all submitted student wheels.</p>
+    </div>
+
+    <div class="summary-grid">
+      <div class="card summary-card">
+        <div class="eyebrow">24-HOUR TIME AUDIT</div>
+        <h2 id="timeN">0 responses</h2>
+        <div id="timeBars"></div>
+      </div>
+      <div class="card summary-card">
+        <div class="eyebrow">PHONE AUDIT</div>
+        <h2 id="phoneN">0 responses</h2>
+        <p>Average phone use: <b id="phoneAvg">0 h/day</b></p>
+        <div id="phoneBars"></div>
+      </div>
+      <div class="card summary-card">
+        <div class="eyebrow">SLEEP & BRAIN</div>
+        <h2 id="sleepN">0 responses</h2>
+        <p>Weekday: <b id="weekdayAvg">0 h</b> · Weekend: <b id="weekendAvg">0 h</b></p>
+        <div id="sleepBars"></div>
+      </div>
+    </div>
+  </section>
+</main>
+<script src="/socket.io/socket.io.js"></script>
+<script src="/presenter.js"></script>
+</body>
+</html>

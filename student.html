@@ -1,0 +1,106 @@
+<!doctype html>
+<html>
+<head>
+  <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+  <title>Human System Reset</title>
+  <link rel="stylesheet" href="/style.css">
+</head>
+<body>
+<main class="student-shell">
+  <div class="student card">
+    <div class="eyebrow">HUMAN SYSTEM RESET</div>
+    <h1 id="welcome">How is your system?</h1>
+    <p class="note">Anonymous · No names or IDs · No right or wrong answers</p>
+
+    <div class="swipe-hint">← Swipe left or right to move between activities →</div>
+
+    <div id="carousel" class="carousel" aria-label="Human System Reset activities">
+      <section class="slide" data-slide="0">
+        <div class="section-block first-block">
+          <div class="section-title">1 · LIVE POLL</div>
+          <h2>Check in</h2>
+          <p class="tiny">The live poll will appear here when the presenter starts it.</p>
+          <div id="poll" class="poll-panel">
+            <h2 id="q">Waiting for the live poll…</h2>
+            <div id="opts"></div>
+            <p id="thanks" class="success"></p>
+          </div>
+        </div>
+      </section>
+
+      <section class="slide" data-slide="1">
+        <div class="section-block first-block">
+          <div class="section-title">2 · 24-HOUR TIME AUDIT</div>
+          <h2>Where does your day actually go?</h2>
+          <p>Enter the approximate number of hours you spend in each category on a typical day. Your total must equal <b>24 hours</b>.</p>
+          <div id="timeInputs"></div>
+          <div class="time-total">TOTAL: <b id="timeTotal">0</b> / 24 hours</div>
+          <button id="timeNext" disabled>24 hours required</button>
+          <p id="timeThanks" class="success"></p>
+        </div>
+      </section>
+
+      <section class="slide" data-slide="2">
+        <div class="section-block first-block">
+          <div class="section-title">3 · PHONE AUDIT</div>
+          <h2>Who is controlling whom?</h2>
+          <p>What are your most common reasons for picking up your phone?</p>
+          <label>Approx. hours of phone use per day
+            <input id="phoneHours" type="number" min="0" max="24" step="0.5" placeholder="e.g. 5.5">
+          </label>
+          <div id="phoneReasons" class="checks"></div>
+          <button id="submitPhone">SAVE PHONE AUDIT</button>
+          <p id="phoneThanks" class="success"></p>
+        </div>
+      </section>
+
+      <section class="slide" data-slide="3">
+        <div class="section-block first-block">
+          <div class="section-title">4 · SLEEP & BRAIN REFLECTION</div>
+          <h2>What is your sleep costing you?</h2>
+          <div class="two-col">
+            <label>Typical weekday sleep (hours)
+              <input id="weekdaySleep" type="number" min="0" max="24" step="0.5" placeholder="e.g. 6.5">
+            </label>
+            <label>Typical weekend sleep (hours)
+              <input id="weekendSleep" type="number" min="0" max="24" step="0.5" placeholder="e.g. 8">
+            </label>
+          </div>
+          <p>When I am sleep-deprived, I notice:</p>
+          <div id="sleepEffects" class="checks"></div>
+          <label>What does my current sleep pattern cost me?
+            <textarea id="sleepCost" rows="4" placeholder="Write a few words for your own reflection."></textarea>
+          </label>
+          <button id="submitSleep">SAVE SLEEP REFLECTION</button>
+          <p id="sleepThanks" class="success"></p>
+        </div>
+      </section>
+
+      <section class="slide" data-slide="4">
+        <div class="section-block first-block">
+          <div class="section-title">5 · SYSTEM DIAGNOSTICS</div>
+          <h2>Wheel of Life</h2>
+          <p>Score each area from <b>0</b> to <b>10</b>.<br><span class="tiny">0 = very dissatisfied / neglected · 10 = highly satisfied / well supported</span></p>
+          <div id="wheelForm"></div>
+          <button id="submitWheel">SHOW MY WHEEL</button>
+          <div id="personal" class="hidden result-box wheel-preview">
+            <div id="myWheel" class="wheel-svg-wrap"></div>
+          </div>
+          <p class="tiny">Your individual wheel is private. The presenter sees only the anonymous group average.</p>
+        </div>
+      </section>
+    </div>
+
+    <div class="carousel-controls">
+      <button id="prevSlide" class="nav-button light" aria-label="Previous activity">←</button>
+      <div id="dots" class="dots" aria-label="Activity navigation"></div>
+      <button id="nextSlide" class="nav-button light" aria-label="Next activity">→</button>
+    </div>
+    <div id="slideLabel" class="slide-label">1 · Live Poll</div>
+    <div class="footer-note">Swipe to explore · Complete each activity when prompted.</div>
+  </div>
+</main>
+<script src="/socket.io/socket.io.js"></script>
+<script src="/student.js"></script>
+</body>
+</html>
