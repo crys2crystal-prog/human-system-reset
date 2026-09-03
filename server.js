@@ -11,6 +11,8 @@ app.use(express.static(__dirname + "/public"));
 
 app.get("/", (req, res) => {
   res.sendFile(__dirname + "/public/presenter.html");
+});app.get("/student", (req, res) => {
+  res.sendFile(__dirname + "/public/student.html");
 });
 
 app.get("/presenter.html", (req, res) => {
