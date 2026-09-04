@@ -70,7 +70,7 @@ function render(d) {
   document.querySelector("#wr").textContent = d.wheelResponses + " responses";
   drawGroup(d.wheelAverages);
 
-  const ts = d.timeSummary;
+ renderMiniBars("timeBars", ts.averages, ts.responses, true);
 
 document.querySelector("#timeN").textContent =
   ts.responses + " responses";
