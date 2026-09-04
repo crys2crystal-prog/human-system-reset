@@ -173,7 +173,7 @@ function drawGroup(sc) {
     "Spirituality": "Do I feel connected\nto something\nbigger than me?"
   };
 
-  const W=980,H=820,cx=490,cy=410,R=285,n=cats.length,step=2*Math.PI/n;
+  const W=980,H=820,cx=490,cy=410,R=220,n=cats.length,step=2*Math.PI/n;
   const point=(r,i)=>{const a=-Math.PI/2+i*step;return [cx+Math.cos(a)*r,cy+Math.sin(a)*r];};
   const poly=pts=>pts.map(p=>p.join(',')).join(' ');
   const esc=x=>String(x).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
