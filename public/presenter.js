@@ -71,8 +71,11 @@ function render(d) {
   drawGroup(d.wheelAverages);
 
   const ts = d.timeSummary;
-  document.querySelector("#timeN").textContent = ts.responses + " responses";
-  renderMiniBars("timeBars", ts.averages, ts.responses, true);
+
+document.querySelector("#timeN").textContent =
+  ts.responses + " responses";
+
+renderTimeAudit(ts.averages);
 
   const ps = d.phoneSummary;
   document.querySelector("#phoneN").textContent = ps.responses + " responses";
