@@ -86,7 +86,6 @@ function render(d) {
 drawGroup(d.wheelAverages || {});
   const ts = d.timeSummary;
 
-const ts = d.timeSummary;
   
 document.querySelector("#timeN").textContent =
   ts.responses + " responses";
