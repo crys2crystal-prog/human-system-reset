@@ -182,28 +182,57 @@ function drawGroup(sc) {
     return `<text x="${x}" y="${top}" text-anchor="${anchor}" font-family="Arial,Helvetica,sans-serif" font-size="${size}" font-weight="${weight}" fill="#202124">${lines.map((l,j)=>`<tspan x="${x}" dy="${j?lh:0}">${esc(l)}</tspan>`).join('')}</text>`;
   };
   let svg=`<svg viewBox="0 0 ${W} ${H}" role="img" aria-label="Consolidated Wheel of Life">
-    <rect width="100%" height="100%" fill="#fff"/>
-    <circle cx="${cx}" cy="${cy}" r="${R}" fill="none" stroke="#222" stroke-width="2"/>`;
-  for(let k=1;k<=10;k++){
-    const r=R*k/10; svg+=`<polygon points="${poly(Array.from({length:n},(_,i)=>point(r,i)))}" fill="none" stroke="#cfcfcf" stroke-width="1"/>`;
-  }
-  for(let i=0;i<n;i++){const [x,y]=point(R,i);svg+=`<line x1="${cx}" y1="${cy}" x2="${x}" y2="${y}" stroke="#cfcfcf" stroke-width="1"/>`;}
-  svg+=`<circle cx="${cx}" cy="${cy}" r="38" fill="#fff" stroke="#222" stroke-width="1.5"/>`;
-    <text x="${cx}" y="${cy-8}" text-anchor="middle" font-family="Arial,Helvetica,sans-serif" font-size="28" font-weight="800" fill="#111">WHEEL</text>
-    <text x="${cx}" y="${cy+23}" text-anchor="middle" font-family="Arial,Helvetica,sans-serif" font-size="28" font-weight="800" fill="#111">OF LIFE</text>`;
-  for(let k=1;k<=10;k++){const r=R*k/10;svg+=`<text x="${cx-13}" y="${cy-r+4}" text-anchor="end" font-family="Arial,Helvetica,sans-serif" font-size="12" fill="#444">${k}</text>`;}
-  const pts=cats.map((c,i)=>point(R*(Number(sc[c]||0)/10),i));
-  svg+=`<polygon points="${poly(pts)}" fill="rgba(0,0,0,.07)" stroke="#222" stroke-width="4"/>`;
-  pts.forEach(([x,y])=>svg+=`<circle cx="${x}" cy="${y}" r="5" fill="#222"/>`);
-  cats.forEach((c,i)=>{
-    const a=-Math.PI/2+i*step,lr=R+105,x=cx+Math.cos(a)*lr,y=cy+Math.sin(a)*lr;
-    let anchor='middle';if(Math.cos(a)>.35)anchor='start';if(Math.cos(a)<-.35)anchor='end';
-    svg+=textBlock(c.toUpperCase(),x,y-20,anchor,14,800);
-    svg+=textBlock(labels[c]||'',x,y+10,anchor,11,500);
-  });
-  svg+='</svg>';
-  host.innerHTML=svg;
+<rect width="100%" height="100%" fill="#fff"/>
+<circle cx="${cx}" cy="${cy}" r="${R}" fill="none" stroke="#222" stroke-width="2"/>`;
+
+for(let k=1;k<=10;k++){
+  const r=R*k/10;
+  svg+=`<polygon points="${poly(Array.from({length:n},(_,i)=>point(r,i)))}" fill="none" stroke="#cfcfcf" stroke-width="1"/>`;
 }
+
+for(let i=0;i<n;i++){
+  const [x,y]=point(R,i);
+  svg+=`<line x1="${cx}" y1="${cy}" x2="${x}" y2="${y}" stroke="#cfcfcf" stroke-width="1"/>`;
+}
+
+svg+=`<circle cx="${cx}" cy="${cy}" r="50" fill="#fff" stroke="#222" stroke-width="1.5"/>`;
+
+svg+=`<text x="${cx}" y="${cy-8}" text-anchor="middle"
+font-family="Arial,Helvetica,sans-serif" font-size="28" font-weight="800" fill="#111">WHEEL</text>`;
+
+svg+=`<text x="${cx}" y="${cy+23}" text-anchor="middle"
+font-family="Arial,Helvetica,sans-serif" font-size="28" font-weight="800" fill="#111">OF LIFE</text>`;
+
+for(let k=1;k<=10;k++){
+  const r=R*k/10;
+  svg+=`<text x="${cx+6}" y="${cy-r+4}" text-anchor="start"
+  font-family="Arial,Helvetica,sans-serif" font-size="12" fill="#222">${k}</text>`;
+}
+
+const pts=cats.map((c,i)=>point(R*(Number(sc[c[0]])/10),i));
+
+svg+=`<polygon points="${poly(pts)}" fill="rgba(0,0,0,.07)" stroke="#222" stroke-width="4"/>`;
+
+pts.forEach(([x,y])=>{
+  svg+=`<circle cx="${x}" cy="${y}" r="5" fill="#222"/>`;
+});
+
+cats.forEach((c,i)=>{
+  const a=-Math.PI/2+i*step;
+  const lr=R+105;
+  const x=cx+Math.cos(a)*lr;
+  const y=cy+Math.sin(a)*lr;
+
+  let anchor="middle";
+  if(Math.cos(a)>0.35) anchor="start";
+  if(Math.cos(a)<-0.35) anchor="end";
+
+  svg+=textBlock(c[0].toUpperCase(),x,y-20,anchor,14,800);
+  svg+=textBlock(labels[c[0]],x,y+10,anchor,11,500);
+});
+
+svg+=`</svg>`;
+out.innerHTML=svg;
 
 function wrapText(ctx, text, x, y, maxWidth, lineHeight) {
   const words = text.split(" "), lines = []; let line = "";
