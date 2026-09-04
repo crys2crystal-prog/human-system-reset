@@ -157,90 +157,200 @@ function renderMiniBars(id, counts, total, isHours = false) {
 }
 
 function drawGroup(sc) {
-  const host = document.getElementById("groupWheel");
-  if (!host || !cats.length) return;
+  const step = Math.PI * 2 / cats.length;
 
-  const labels = {
-    "Academic Performance": "Am I growing, learning\nand doing my best?",
-    "Life Path": "Am I clear about\nmy goals and\nmoving forward?",
-    "Friendship": "Do I have supportive,\nmeaningful\nfriendships?",
-    "Mental Health": "Am I taking care of\nmy mind and\nemotions?",
-    "Family": "Do I feel connected\nand supported by\nmy family?",
-    "Fun": "Am I making time for\njoy, hobbies and\nthings I enjoy?",
-    "Love": "Am I making time for\nlove, connection and\nhealthy relationships?",
-    "Finances": "Am I managing my\nmoney wisely and\nplanning ahead?",
-    "Physical Health": "Am I eating well,\nexercising and\ngetting enough rest?",
-    "Spirituality": "Do I feel connected\nto something\nbigger than me?"
-  };
+  let svg = `
+    <svg viewBox="0 0 700 700"
+         width="100%"
+         height="100%"
+         role="img"
+         aria-label="Consolidated Wheel of Life">
 
-  const W=980,H=820,cx=490,cy=410,R=220,n=cats.length,step=2*Math.PI/n;
-  const point=(r,i)=>{const a=-Math.PI/2+i*step;return [cx+Math.cos(a)*r,cy+Math.sin(a)*r];};
-  const poly=pts=>pts.map(p=>p.join(',')).join(' ');
-  const esc=x=>String(x).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
-  const textBlock=(text,x,y,anchor='middle',size=13,weight=500)=>{
-    const lines=String(text||'').split('\n'),lh=17,top=y-(lines.length-1)*lh/2;
-    return `<text x="${x}" y="${top}" text-anchor="${anchor}" font-family="Arial,Helvetica,sans-serif" font-size="${size}" font-weight="${weight}" fill="#202124">${lines.map((l,j)=>`<tspan x="${x}" dy="${j?lh:0}">${esc(l)}</tspan>`).join('')}</text>`;
-  };
-  let svg=`<svg viewBox="0 0 ${W} ${H}" role="img" aria-label="Consolidated Wheel of Life">
-<rect width="100%" height="100%" fill="#fff"/>
-<circle cx="${cx}" cy="${cy}" r="${R}" fill="none" stroke="#222" stroke-width="2"/>`;
+      <rect width="100%" height="100%" fill="#fff"/>
 
-for(let k=1;k<=10;k++){
-  const r=R*k/10;
-  svg+=`<polygon points="${poly(Array.from({length:n},(_,i)=>point(r,i)))}" fill="none" stroke="#cfcfcf" stroke-width="1"/>`;
+      <circle
+        cx="${cx}"
+        cy="${cy}"
+        r="${R}"
+        fill="none"
+        stroke="#222"
+        stroke-width="2"
+      />
+  `;
+
+  // Wheel grid
+  for (let k = 1; k <= 10; k++) {
+    const r = R * k / 10;
+
+    svg += `
+      <polygon
+        points="${poly(
+          Array.from({ length: cats.length }, (_, i) => point(r, i))
+        )}"
+        fill="none"
+        stroke="#cfcfcf"
+        stroke-width="1"
+      />
+    `;
+  }
+
+  // Radial lines
+  for (let i = 0; i < cats.length; i++) {
+    const [x, y] = point(R, i);
+
+    svg += `
+      <line
+        x1="${cx}"
+        y1="${cy}"
+        x2="${x}"
+        y2="${y}"
+        stroke="#cfcfcf"
+        stroke-width="1"
+      />
+    `;
+  }
+
+  // Centre circle
+  svg += `
+    <circle
+      cx="${cx}"
+      cy="${cy}"
+      r="50"
+      fill="#fff"
+      stroke="#222"
+      stroke-width="1.5"
+    />
+
+    <text
+      x="${cx}"
+      y="${cy - 8}"
+      text-anchor="middle"
+      font-family="Arial,Helvetica,sans-serif"
+      font-size="28"
+      font-weight="800"
+      fill="#111"
+    >WHEEL</text>
+
+    <text
+      x="${cx}"
+      y="${cy + 23}"
+      text-anchor="middle"
+      font-family="Arial,Helvetica,sans-serif"
+      font-size="28"
+      font-weight="800"
+      fill="#111"
+    >OF LIFE</text>
+  `;
+
+  // Scale numbers 1–10
+  for (let k = 1; k <= 10; k++) {
+    const r = R * k / 10;
+
+    svg += `
+      <text
+        x="${cx + 6}"
+        y="${cy - r + 4}"
+        text-anchor="start"
+        font-family="Arial,Helvetica,sans-serif"
+        font-size="12"
+        fill="#222"
+      >${k}</text>
+    `;
+  }
+
+  // Average student wheel
+  const pts = cats.map((c, i) =>
+    point(R * (Number(sc[c[0]]) / 10), i)
+  );
+
+  svg += `
+    <polygon
+      points="${poly(pts)}"
+      fill="rgba(0,0,0,.07)"
+      stroke="#222"
+      stroke-width="4"
+    />
+  `;
+
+  // Data points
+  pts.forEach(([x, y]) => {
+    svg += `
+      <circle
+        cx="${x}"
+        cy="${y}"
+        r="5"
+        fill="#222"
+      />
+    `;
+  });
+
+  // Category labels
+  cats.forEach((c, i) => {
+    const a = -Math.PI / 2 + i * step;
+    const lr = R + 105;
+
+    const x = cx + Math.cos(a) * lr;
+    const y = cy + Math.sin(a) * lr;
+
+    let anchor = "middle";
+
+    if (Math.cos(a) > 0.35) {
+      anchor = "start";
+    }
+
+    if (Math.cos(a) < -0.35) {
+      anchor = "end";
+    }
+
+    svg += textBlock(
+      c[0].toUpperCase(),
+      x,
+      y - 20,
+      anchor,
+      14,
+      800
+    );
+
+    svg += textBlock(
+      labels[c[0]],
+      x,
+      y + 10,
+      anchor,
+      11,
+      500
+    );
+  });
+
+  svg += `</svg>`;
+
+  out.innerHTML = svg;
 }
 
-for(let i=0;i<n;i++){
-  const [x,y]=point(R,i);
-  svg+=`<line x1="${cx}" y1="${cy}" x2="${x}" y2="${y}" stroke="#cfcfcf" stroke-width="1"/>`;
-}
-
-svg+=`<circle cx="${cx}" cy="${cy}" r="50" fill="#fff" stroke="#222" stroke-width="1.5"/>`;
-
-svg+=`<text x="${cx}" y="${cy-8}" text-anchor="middle"
-font-family="Arial,Helvetica,sans-serif" font-size="28" font-weight="800" fill="#111">WHEEL</text>`;
-
-svg+=`<text x="${cx}" y="${cy+23}" text-anchor="middle"
-font-family="Arial,Helvetica,sans-serif" font-size="28" font-weight="800" fill="#111">OF LIFE</text>`;
-
-for(let k=1;k<=10;k++){
-  const r=R*k/10;
-  svg+=`<text x="${cx+6}" y="${cy-r+4}" text-anchor="start"
-  font-family="Arial,Helvetica,sans-serif" font-size="12" fill="#222">${k}</text>`;
-}
-
-const pts=cats.map((c,i)=>point(R*(Number(sc[c[0]])/10),i));
-
-svg+=`<polygon points="${poly(pts)}" fill="rgba(0,0,0,.07)" stroke="#222" stroke-width="4"/>`;
-
-pts.forEach(([x,y])=>{
-  svg+=`<circle cx="${x}" cy="${y}" r="5" fill="#222"/>`;
-});
-
-cats.forEach((c,i)=>{
-  const a=-Math.PI/2+i*step;
-  const lr=R+105;
-  const x=cx+Math.cos(a)*lr;
-  const y=cy+Math.sin(a)*lr;
-
-  let anchor="middle";
-  if(Math.cos(a)>0.35) anchor="start";
-  if(Math.cos(a)<-0.35) anchor="end";
-
-  svg+=textBlock(c[0].toUpperCase(),x,y-20,anchor,14,800);
-  svg+=textBlock(labels[c[0]],x,y+10,anchor,11,500);
-});
-
-svg+=`</svg>`;
-out.innerHTML=svg;
 
 function wrapText(ctx, text, x, y, maxWidth, lineHeight) {
-  const words = text.split(" "), lines = []; let line = "";
+  const words = text.split(" ");
+  const lines = [];
+  let line = "";
+
   words.forEach(word => {
     const test = line ? line + " " + word : word;
-    if (ctx.measureText(test).width > maxWidth && line) { lines.push(line); line = word; } else line = test;
+
+    if (ctx.measureText(test).width > maxWidth && line) {
+      lines.push(line);
+      line = word;
+    } else {
+      line = test;
+    }
   });
-  if (line) lines.push(line);
+
+  if (line) {
+    lines.push(line);
+  }
+
   const start = y - ((lines.length - 1) * lineHeight) / 2;
-  lines.forEach((l, i) => ctx.fillText(l, x, start + i * lineHeight));
+
+  lines.forEach((l, i) => {
+    ctx.fillText(l, x, start + i * lineHeight);
+  });
+}
 }
