@@ -211,7 +211,7 @@ io.on("connection", s => {
     let total = 0;
     for (const c of categories) {
       const v = Number(data?.[c]);
-      if (!Number.isFinite(v) || v < 0 || v > 24) return;
+      if (!Number.isFinite(v) || v < 0 || v > 24 || (v * 2) % 1 !== 0) return;
       clean[c] = v;
       total += v;
     }
