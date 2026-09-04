@@ -47,7 +47,22 @@ startButton.onclick = () => {
 closeButton.onclick = () => s.emit("closePoll");
 clearButton.onclick = () => { if (confirm("Clear all anonymous live data?")) s.emit("clearSession"); };
 
-s.on("init", d => { cats = d.wheelCategories || []; render(d); });
+s.on("init", d => {
+  cats = d.wheelCategories || [
+    "Academic Performance",
+    "Life Path",
+    "Friendship",
+    "Mental Health",
+    "Family",
+    "Fun",
+    "Love",
+    "Finances",
+    "Physical Health",
+    "Spirituality"
+  ];
+
+  render(d);
+});
 s.on("state", render);
 
 function render(d) {
@@ -68,7 +83,7 @@ function render(d) {
   }
 
   document.querySelector("#wr").textContent = d.wheelResponses + " responses";
-  drawGroup(d.wheelAverages);
+  drawGroup(d.wheelAverages || {});
 
 document.querySelector("#timeN").textContent =
   ts.responses + " responses";
