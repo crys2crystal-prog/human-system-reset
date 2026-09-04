@@ -94,34 +94,48 @@ function renderMiniBars(id, counts, total, isHours = false) {
   box.innerHTML = "";
 
   Object.entries(counts).forEach(([name, n]) => {
-
     const value = Number(n) || 0;
 
-    // For the 24-hour audit:
-    // each bar represents 0.5 hour = 2.08% of the day
-    const p = isHours
-      ? Math.min(100, (value / 24) * 100)
-      : (total ? Math.round(value / total * 100) : 0);
+    let percentage;
+    let display;
+
+    if (isHours) {
+      // 24-hour day = 100%
+      percentage = Math.min(100, (value / 24) * 100);
+      display = `${value.toFixed(1)} h`;
+    } else {
+      percentage = total
+        ? Math.round((value / total) * 100)
+        : 0;
+      display = value;
+    }
 
     const row = document.createElement("div");
     row.className = isHours ? "time-row" : "mini-bar";
 
-    const display = isHours
-      ? `${value.toFixed(1)} h`
-      : value;
+    if (isHours) {
+      row.innerHTML = `
+        <div class="time-meta">
+          <span class="time-name">${name}</span>
+          <b>${display}</b>
+        </div>
 
-    row.innerHTML = `
-      <div class="${isHours ? "time-meta" : "mini-meta"}">
-        <span></span>
-        <b>${display}</b>
-      </div>
+        <div class="time-track">
+          <div class="time-fill" style="width:${percentage}%"></div>
+        </div>
+      `;
+    } else {
+      row.innerHTML = `
+        <div class="mini-meta">
+          <span>${name}</span>
+          <span>${display}</span>
+        </div>
 
-      <div class="${isHours ? "time-track" : "mini-track"}">
-        <div class="fill" style="width:${p}%"></div>
-      </div>
-    `;
-
-    row.querySelector("span").textContent = name;
+        <div class="mini-track">
+          <div class="fill" style="width:${percentage}%"></div>
+        </div>
+      `;
+    }
 
     box.appendChild(row);
   });
