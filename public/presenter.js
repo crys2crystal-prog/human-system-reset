@@ -70,12 +70,10 @@ function render(d) {
   document.querySelector("#wr").textContent = d.wheelResponses + " responses";
   drawGroup(d.wheelAverages);
 
- renderMiniBars("timeBars", ts.averages, ts.responses, true);
-
 document.querySelector("#timeN").textContent =
   ts.responses + " responses";
 
-renderTimeAudit(ts.averages);
+renderMiniBars("timeBars", ts.averages, ts.responses, true);
 
   const ps = d.phoneSummary;
   document.querySelector("#phoneN").textContent = ps.responses + " responses";
