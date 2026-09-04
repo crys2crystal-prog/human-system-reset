@@ -90,14 +90,39 @@ renderTimeAudit(ts.averages);
 }
 
 function renderMiniBars(id, counts, total, isHours = false) {
-  const box = document.getElementById(id); box.innerHTML = "";
-  const max = isHours ? 24 : Math.max(1, total);
+  const box = document.getElementById(id);
+  box.innerHTML = "";
+
   Object.entries(counts).forEach(([name, n]) => {
-    const p = isHours ? Math.round(Number(n) / max * 100) : (total ? Math.round(n / total * 100) : 0);
-    const row = document.createElement("div"); row.className = "mini-bar";
-    const display = isHours ? `${n} h` : n;
-    row.innerHTML = `<div class="mini-meta"><span></span><span>${display}</span></div><div class="mini-track"><div class="fill" style="width:${p}%"></div></div>`;
-    row.querySelector(".mini-meta span").textContent = name;
+
+    const value = Number(n) || 0;
+
+    // For the 24-hour audit:
+    // each bar represents 0.5 hour = 2.08% of the day
+    const p = isHours
+      ? Math.min(100, (value / 24) * 100)
+      : (total ? Math.round(value / total * 100) : 0);
+
+    const row = document.createElement("div");
+    row.className = isHours ? "time-row" : "mini-bar";
+
+    const display = isHours
+      ? `${value.toFixed(1)} h`
+      : value;
+
+    row.innerHTML = `
+      <div class="${isHours ? "time-meta" : "mini-meta"}">
+        <span></span>
+        <b>${display}</b>
+      </div>
+
+      <div class="${isHours ? "time-track" : "mini-track"}">
+        <div class="fill" style="width:${p}%"></div>
+      </div>
+    `;
+
+    row.querySelector("span").textContent = name;
+
     box.appendChild(row);
   });
 }
