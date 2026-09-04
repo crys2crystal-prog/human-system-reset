@@ -12,9 +12,17 @@ const closeButton = document.querySelector("#close");
 const clearButton = document.querySelector("#clear");
 
 fetch("/api/info").then(r => r.json()).then(d => {
-  const u = (location.hostname === "localhost" || location.hostname === "127.0.0.1") ? (d.urls[0] || location.origin) : location.origin;
+  const base = (location.hostname === "localhost" || location.hostname === "127.0.0.1")
+    ? (d.urls[0] || location.origin)
+    : location.origin;
+
+  const u = base + "/student";
+
   studentUrl.value = u;
-  fetch("/api/qr?url=" + encodeURIComponent(u)).then(r => r.text()).then(x => qr.src = x);
+
+  fetch("/api/qr?url=" + encodeURIComponent(u))
+    .then(r => r.text())
+    .then(x => qr.src = x);
 });
 
 function add(v = "") {
