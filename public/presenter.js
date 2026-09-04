@@ -188,7 +188,7 @@ function drawGroup(sc) {
     const r=R*k/10; svg+=`<polygon points="${poly(Array.from({length:n},(_,i)=>point(r,i)))}" fill="none" stroke="#cfcfcf" stroke-width="1"/>`;
   }
   for(let i=0;i<n;i++){const [x,y]=point(R,i);svg+=`<line x1="${cx}" y1="${cy}" x2="${x}" y2="${y}" stroke="#cfcfcf" stroke-width="1"/>`;}
-  svg+=`<circle cx="${cx}" cy="${cy}" r="50" fill="#fff" stroke="#222" stroke-width="1.5"/>`;
+  svg+=`<circle cx="${cx}" cy="${cy}" r="38" fill="#fff" stroke="#222" stroke-width="1.5"/>`;
     <text x="${cx}" y="${cy-8}" text-anchor="middle" font-family="Arial,Helvetica,sans-serif" font-size="28" font-weight="800" fill="#111">WHEEL</text>
     <text x="${cx}" y="${cy+23}" text-anchor="middle" font-family="Arial,Helvetica,sans-serif" font-size="28" font-weight="800" fill="#111">OF LIFE</text>`;
   for(let k=1;k<=10;k++){const r=R*k/10;svg+=`<text x="${cx-13}" y="${cy-r+4}" text-anchor="end" font-family="Arial,Helvetica,sans-serif" font-size="12" fill="#444">${k}</text>`;}
